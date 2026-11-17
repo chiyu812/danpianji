@@ -1,0 +1,9 @@
+".\Objects\main.obj",
+".\Objects\yanshi.obj",
+".\Objects\jvzhenjianpan.obj",
+".\Objects\LCD1602.obj",
+".\Objects\anjianchuli.obj",
+".\Objects\yunsuan.obj" 
+TO ".\Objects\jisuanqi" 
+PRINT(".\Listings\jisuanqi.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

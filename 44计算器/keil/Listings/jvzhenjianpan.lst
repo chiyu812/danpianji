@@ -1,0 +1,63 @@
+C51 COMPILER V9.57.0.0   JVZHENJIANPAN                                                     07/18/2026 10:36:36 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE JVZHENJIANPAN
+OBJECT MODULE PLACED IN .\Objects\jvzhenjianpan.obj
+COMPILER INVOKED BY: D:\yingyongxz\keil5-MDK\C51\BIN\C51.EXE jvzhenjianpan.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+                    - PRINT(.\Listings\jvzhenjianpan.lst) TABS(2) OBJECT(.\Objects\jvzhenjianpan.obj)
+
+line level    source
+
+   1          //P0为矩阵键盘接口
+   2          #include <REGX52.H>
+   3          #include "yanshi.h" 
+   4          #define unint unsigned int
+   5          #define unchar unsigned char
+   6            
+   7          unchar jvzhenjianpan()//获取矩阵键盘键值
+   8          {
+   9   1        unchar key=0;
+  10   1        P0=0XFF;
+  11   1        P0_0=0;//第一行
+  12   1        if(P0_4==0){yanshi(20);while(P0_4==0);yanshi(20);key=1;}
+  13   1        if(P0_5==0){yanshi(20);while(P0_5==0);yanshi(20);key=2;}
+  14   1        if(P0_6==0){yanshi(20);while(P0_6==0);yanshi(20);key=3;}
+  15   1        if(P0_7==0){yanshi(20);while(P0_7==0);yanshi(20);key=10;}//+
+  16   1        
+  17   1        P0=0XFF;
+  18   1        P0_1=0;//第二行
+  19   1        if(P0_4==0){yanshi(20);while(P0_4==0);yanshi(20);key=4;}
+  20   1        if(P0_5==0){yanshi(20);while(P0_5==0);yanshi(20);key=5;}
+  21   1        if(P0_6==0){yanshi(20);while(P0_6==0);yanshi(20);key=6;}
+  22   1        if(P0_7==0){yanshi(20);while(P0_7==0);yanshi(20);key=11;}//-
+  23   1        
+  24   1        P0=0XFF;
+  25   1        P0_2=0;//第三行
+  26   1        if(P0_4==0){yanshi(20);while(P0_4==0);yanshi(20);key=7;}
+  27   1        if(P0_5==0){yanshi(20);while(P0_5==0);yanshi(20);key=8;}
+  28   1        if(P0_6==0){yanshi(20);while(P0_6==0);yanshi(20);key=9;}
+  29   1        if(P0_7==0){yanshi(20);while(P0_7==0);yanshi(20);key=12;}//*
+  30   1        
+  31   1        P0=0XFF;
+  32   1        P0_3=0;//第四行
+  33   1        if(P0_4==0){yanshi(20);while(P0_4==0);yanshi(20);key=13;}//DEL  
+  34   1        if(P0_5==0){yanshi(20);while(P0_5==0);yanshi(20);key=16;}
+  35   1        if(P0_6==0){yanshi(20);while(P0_6==0);yanshi(20);key=14;}// =
+  36   1        if(P0_7==0){yanshi(20);while(P0_7==0);yanshi(20);key=15;}//  /
+  37   1      
+  38   1        return key;
+  39   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    393    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

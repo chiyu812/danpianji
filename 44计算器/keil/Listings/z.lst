@@ -1,0 +1,100 @@
+C51 COMPILER V9.57.0.0   Z                                                                 07/15/2026 18:54:02 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE Z
+OBJECT MODULE PLACED IN .\Objects\z.obj
+COMPILER INVOKED BY: D:\yingyongxz\keil5-MDK\C51\BIN\C51.EXE z.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+                    -tings\z.lst) TABS(2) OBJECT(.\Objects\z.obj)
+
+line level    source
+
+   1          
+   2          //yusuan.c////////////////////////////////////
+   3          #include <string.h>
+   4          void str_mul(char *a, char *b, char *res) {
+   5   1          int len1 = strlen(a),len2 = strlen(b);//a,b的位数
+   6   1          int i, j, carry;
+   7   1          int tmp[30] = {0};     // 暂存乘积每位（最大30位）
+   8   1          for (i = len1- 1; i >= 0; i--) 
+   9   1          {
+  10   2            for (j = len2 - 1; j >= 0; j--) 
+  11   2            tmp[i + j + 1] += (a[i] - '0') * (b[j] - '0'); //a[i],b[j]转换为数字并相乘('8'->8)
+  12   2          }
+  13   1          
+  14   1          // 进位处理
+  15   1          for (i = len1 + len2 - 1; i > 0; i--) {
+  16   2              tmp[i - 1] += tmp[i] / 10;
+  17   2              tmp[i] %= 10;
+  18   2          }
+  19   1          // 转为字符串，跳过前导零
+  20   1          int idx = 0;
+*** ERROR C141 IN LINE 20 OF z.c: syntax error near 'int'
+*** ERROR C202 IN LINE 20 OF z.c: 'idx': undefined identifier
+  21   1          while (tmp[idx] == 0 && idx < len1 + len2 - 1) idx++;
+*** ERROR C202 IN LINE 21 OF z.c: 'idx': undefined identifier
+*** ERROR C202 IN LINE 21 OF z.c: 'idx': undefined identifier
+  22   1          for (i = idx; i < len1 + len2; i++) 
+*** ERROR C202 IN LINE 22 OF z.c: 'idx': undefined identifier
+  23   1          {
+  24   2            res[i - idx] = tmp[i] + '0';
+*** ERROR C202 IN LINE 24 OF z.c: 'idx': undefined identifier
+  25   2          }
+  26   1          res[len1 + len2 - idx] = '\0';
+*** ERROR C202 IN LINE 26 OF z.c: 'idx': undefined identifier
+  27   1      }
+  28          
+  29          
+  30          
+  31          
+  32          
+  33          ////////////////////////////////////
+  34          ////////////////////////////////////
+  35          //yunsuan.c乘法分支////////////////
+  36          if (t.yunsuanfu == 3) {
+*** ERROR C141 IN LINE 36 OF z.c: syntax error near 'if'
+*** ERROR C141 IN LINE 36 OF z.c: syntax error near '.', expected ')'
+*** ERROR C129 IN LINE 36 OF z.c: missing ';' before '=='
+  37              // 将 a 和 b 转为字符串（需额外函数，或直接使用 sprintf）
+  38            char stra[10], strb[10];//定义数组，用来存放a,b(10位，是因为a,b最大九位+'/0')
+  39              sprintf(stra, "%lu", t.a);
+  40              sprintf(strb, "%lu", t.b);
+  41              // 调用字符串乘法
+  42              str_mul(stra, strb, zhong.result);
+  43              zhong.chang = strlen(zhong.result);
+  44              if (zhong.chang > 9) {
+C51 COMPILER V9.57.0.0   Z                                                                 07/15/2026 18:54:02 PAGE 2   
+
+  45                  zhong.answer = 0;           // 清空，仅使用 result
+  46                  // 复制 result 到 zhong 的 result 字段
+  47                  strcpy(zhong.result, zhong.result); // 实际已存入
+  48              } else {
+  49                  // 位数≤9，仍用 answer 存储数值，便于原有显示
+  50                  zhong.answer = t.a * t.b;
+  51                  zhong.result[0] = '\0';     // 清空字符串
+  52              }
+  53              return zhong;
+  54          }
+  55          
+  56          
+  57          
+  58          /////////////////////////////////////
+  59          /////////////////////////////////////
+  60          //main.c/////////////////////////////
+  61          if (temp.yunsuanfu != 5) {
+  62              // ... 显示输入 ...
+  63          } else { // 按等于
+  64              zifuchuan(1,1,"                ");
+  65              zifuchuan(2,1,"                ");
+  66              zifu(2,1,'=');
+  67              if (temp.chang_jieguo > 9) {
+  68                  // 使用字符串显示
+  69                  zifuchuan(2, 16 - temp.chang_jieguo + 1, temp.result);
+  70              } else {
+  71                  shuzi(2, 16 - temp.chang_jieguo + 1, temp.jieguo, temp.chang_jieguo);
+  72              }
+  73              if (temp.fuhao) {
+  74                  zifu(2, 16 - temp.chang_jieguo, '-');
+  75              }
+  76          }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  10 ERROR(S)

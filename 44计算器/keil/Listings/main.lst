@@ -1,0 +1,84 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              07/18/2026 11:24:34 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\yingyongxz\keil5-MDK\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "cunchu.h"
+   3          #include "LCD1602.h"
+   4          #include "jvzhenjianpan.h"
+   5          #include "anjianchuli.h"
+   6          
+   7          #define unint unsigned int
+   8          #define unchar unsigned char
+   9            
+  10          unchar key;//按键值
+  11          cunchu Q;//a,b的相关信息
+  12          void main()
+  13          {
+  14   1        LCD_chushi();
+  15   1        while(1)
+  16   1        {
+  17   2          key=jvzhenjianpan();
+  18   2          if(key)
+  19   2          {
+  20   3            Q=anjianchuli(key);
+  21   3            
+  22   3            if(Q.yunsuanfu!=5)//a,b数值输入
+  23   3            {
+  24   4              zifuchuan(3-Q.flag,13,"    ");   
+  25   4              shuzi(3-Q.flag,17-Q.chang_a,Q.a,Q.chang_a);
+  26   4              if(Q.flag==2)
+  27   4              {
+  28   5                zifuchuan(2,2,"               ");
+  29   5                zifuchuan(Q.flag,13,"    "); 
+  30   5                shuzi(Q.flag,17-Q.chang_b,Q.b,Q.chang_b);
+  31   5              }
+  32   4            }
+  33   3            else//a,b计算结果得出
+  34   3            {
+  35   4              zifuchuan(2,2,"               ");
+  36   4              zifu(2,1,'=');
+  37   4              if(Q.chufa==0)//加、减、乘法运算
+  38   4              {
+  39   5                shuzi(2,17-Q.chang_jieguo,Q.jieguo,Q.chang_jieguo);
+  40   5                if(Q.fuhao)
+  41   5                zifu(2,17-Q.chang_jieguo-1,'-');
+  42   5              }
+  43   4              else//除法运算
+  44   4              {
+  45   5                if(Q.xiao!=0)//除不尽,保留两位小数
+  46   5                {
+  47   6                  shuzi(2,14-Q.chang_jieguo,Q.zheng,Q.chang_jieguo);
+  48   6                  zifu(2,14,'.');
+  49   6                  shuzi(2,15,Q.xiao,2);
+  50   6                }
+  51   5                else//能够除尽
+  52   5                shuzi(2,17-Q.chang_jieguo,Q.zheng,Q.chang_jieguo);
+  53   5              }
+  54   4            }
+C51 COMPILER V9.57.0.0   MAIN                                                              07/18/2026 11:24:34 PAGE 2   
+
+  55   3          }
+  56   2        }
+  57   1      }
+  58          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    305    ----
+   CONSTANT SIZE    =     21    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     24    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

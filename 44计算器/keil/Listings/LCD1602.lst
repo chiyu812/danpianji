@@ -1,0 +1,126 @@
+C51 COMPILER V9.57.0.0   LCD1602                                                           07/18/2026 10:36:36 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN .\Objects\LCD1602.obj
+COMPILER INVOKED BY: D:\yingyongxz\keil5-MDK\C51\BIN\C51.EXE LCD1602.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                    -(.\Listings\LCD1602.lst) TABS(2) OBJECT(.\Objects\LCD1602.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "yanshi.h"
+   3          #define unint  unsigned int
+   4          #define unchar unsigned char
+   5          #define unlong unsigned long
+   6            
+   7          sbit RS=P2^0; //1处理数据，0处理指令
+   8          sbit RW=P2^1; //1读，0写
+   9          sbit E= P2^2; //上升沿：向LCD写入DATA(shujv/zhiling)
+  10          
+  11          #define DATA P1 //LCD接收发送数据端口
+  12          
+  13          void xiez(unchar zhiling);//向LCD写入指令
+  14          void xies(unchar shujv);//向LCD写入数据
+  15          void guangbiao(unchar hang,unchar lie);//设置光标位置
+  16          unlong cifang(int x,int y);//返回次方数，以便显示不同进制的数字时，配合%10剥离每�
+             -�位
+  17          
+  18          void LCD_chushi()//LCD初始化
+  19          {
+  20   1        xiez(0x38);
+  21   1        xiez(0x0C);
+  22   1        xiez(0x06);
+  23   1        xiez(0x01);
+  24   1      }
+  25          
+  26          void shuzi(unchar hang,unchar lie,unlong shuzi,unchar changdu) //显示无符号数字
+  27          {
+  28   1        unchar i;
+  29   1        guangbiao(hang,lie);
+  30   1        for(i=0;i<changdu;i++)
+  31   1        { 
+  32   2          xies(shuzi/cifang(10,changdu-i-1)%10 +0x30);
+  33   2          //shuzi/cifang(10,changdu-i-1)%10:从高到低剥离每一位，
+  34   2          //+0x30:将剥离好的每一位转化为ASII码，进行显示
+  35   2        }
+  36   1        
+  37   1      }
+  38          
+  39          void zifu(unchar hang,unchar lie,unchar zifu)  //显示字符
+  40          {
+  41   1        guangbiao(hang,lie);
+  42   1        xies(zifu);
+  43   1      }
+  44            
+  45          void zifuchuan(unchar hang,unchar lie,unchar zifuchuan[])  //显示字符串
+  46          {
+  47   1        unchar i;
+  48   1        guangbiao(hang,lie);
+  49   1        for(i=0;zifuchuan[i]!='\0';i++)
+  50   1        {
+  51   2          xies(zifuchuan[i]);
+  52   2        }
+  53   1      }
+C51 COMPILER V9.57.0.0   LCD1602                                                           07/18/2026 10:36:36 PAGE 2   
+
+  54          
+  55          void xiez(unchar zhiling)//向LCD写入指令
+  56          {
+  57   1        RS=0;
+  58   1        RW=0;
+  59   1        E=0;
+  60   1        DATA=zhiling;
+  61   1        E=1;//上升沿写入数据
+  62   1        yanshi(1);
+  63   1        E=0;
+  64   1      }
+  65          
+  66          void xies(unchar shujv)//向LCD写入数据
+  67          {
+  68   1        RS=1;
+  69   1        RW=0;
+  70   1        E=0;
+  71   1        DATA=shujv;
+  72   1        E=1;//上升沿写入数据
+  73   1        yanshi(1);
+  74   1        E=0;
+  75   1      }
+  76          
+  77          void guangbiao(unchar hang,unchar lie)//设置光标位置
+  78          {
+  79   1        if(hang==1)//第1行，1-16列
+  80   1        {
+  81   2          xiez(0x80|(lie-1));
+  82   2        }
+  83   1        else//第2行，1-16列
+  84   1        {
+  85   2          xiez(0x80|(lie-1)+0x40);
+  86   2        }
+  87   1      }
+  88          
+  89          unlong cifang(int x,int y)//返回次方数，以便显示不同进制的数字时，配合%10剥离每一
+             -位
+  90          {
+  91   1        unlong jieguo=1;
+  92   1        unchar i;
+  93   1        for(i=0;i<y;i++)
+  94   1        {
+  95   2          jieguo=jieguo*x;
+  96   2        }
+  97   1        return jieguo;
+  98   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    281    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      21
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

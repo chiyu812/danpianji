@@ -1,0 +1,191 @@
+C51 COMPILER V9.57.0.0   ANJIANCHULI                                                       07/18/2026 11:34:43 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE ANJIANCHULI
+OBJECT MODULE PLACED IN .\Objects\anjianchuli.obj
+COMPILER INVOKED BY: D:\yingyongxz\keil5-MDK\C51\BIN\C51.EXE anjianchuli.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND P
+                    -RINT(.\Listings\anjianchuli.lst) TABS(2) OBJECT(.\Objects\anjianchuli.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include <string.h>//包含memset()
+   3          #include "cunchu.h"
+   4          #include "LCD1602.h"
+   5          #include "yunsuan.h"
+   6          #include "yanshi.h"
+   7          #define unchar unsigned char
+   8          #define QING  0x01//清屏指令  
+   9          cunchu temp={0,0,0,0,1};//相当于a,b的副本
+  10          daan zhong;
+  11          
+  12          cunchu anjianchuli(unchar key)//按键处理函数
+  13          {
+  14   1        if(key<10||key==16)//按下1-9,0数字键
+  15   1        {
+  16   2          if(temp.flag==1)//a输入
+  17   2          {
+  18   3            temp.a=(key==16)?temp.a*10:temp.a*10+key;
+  19   3            temp.chang_a++;
+  20   3          }
+  21   2          else//b输入
+  22   2          {
+  23   3            temp.b=(key==16)?temp.b*10:temp.b*10+key;
+  24   3            temp.chang_b++;
+  25   3          }
+  26   2          
+  27   2          //a,b输入超出范围
+  28   2          if(temp.chang_a>4||temp.chang_b>4)
+  29   2          {
+  30   3            
+  31   3            xiez(QING);//LCD清屏
+  32   3            yanshi(1);
+  33   3            zifuchuan(1,6,"INPUT");
+  34   3            zifuchuan(2,3,"OUT OF RANGE");
+  35   3            yanshi(2000);
+  36   3            xiez(QING);//LCD清屏
+  37   3            yanshi(1);
+  38   3            
+  39   3            if(temp.chang_a>4)//a超出范围
+  40   3            {
+  41   4              temp.a=0;
+  42   4              temp.chang_a=0;
+  43   4            }
+  44   3            else//////////////b超出范围
+  45   3            {
+  46   4              temp.b=0;
+  47   4              temp.chang_b=0;
+  48   4              switch(temp.yunsuanfu)
+  49   4              {
+  50   5                case 1:zifu(2,1,'+');break;
+  51   5                case 2:zifu(2,1,'-');break;
+  52   5                case 3:zifu(2,1,'*');break;
+  53   5                case 4:zifu(2,1,'/');break;
+  54   5              }
+C51 COMPILER V9.57.0.0   ANJIANCHULI                                                       07/18/2026 11:34:43 PAGE 2   
+
+  55   4            }
+  56   3            return temp;
+  57   3          }
+  58   2        }
+  59   1        
+  60   1        //////////////////// 按下+-*/运算按键
+  61   1        if(key==10)//+
+  62   1        {
+  63   2          temp.flag=2;
+  64   2          zifu(2,1,'+');
+  65   2          temp.yunsuanfu=1;//运算符号为+
+  66   2        }
+  67   1        if(key==11)//-
+  68   1        {
+  69   2          temp.flag=2;
+  70   2          zifu(2,1,'-');
+  71   2          temp.yunsuanfu=2;//运算符号为-
+  72   2        }
+  73   1        if(key==12)//*
+  74   1        {
+  75   2          temp.flag=2;
+  76   2          zifu(2,1,'*');
+  77   2          temp.yunsuanfu=3;//运算符号为*
+  78   2        }
+  79   1        if(key==15)//  /
+  80   1        {
+  81   2          temp.flag=2;
+  82   2          zifu(2,1,'/');
+  83   2          temp.yunsuanfu=4;//运算符号为 /
+  84   2          temp.chufa=1;
+  85   2        }
+  86   1        
+  87   1        
+  88   1        /////////////////按下=键
+  89   1        if(key==14)//=
+  90   1        {
+  91   2          if(temp.yunsuanfu==4&&temp.b==0)//除法运算进行除数判断，除数不能为0
+  92   2          {
+  93   3            xiez(QING);//LCD清屏
+  94   3            yanshi(1);
+  95   3            zifuchuan(1,6,"ERROR");//除数不能为0
+  96   3            zifuchuan(2,5,"DIV BY 0");
+  97   3            yanshi(2000);
+  98   3            xiez(QING);//LCD清屏
+  99   3            yanshi(1);
+ 100   3            
+ 101   3            temp.b=0;
+ 102   3            temp.chang_b=0;
+ 103   3            zifu(2,1,'/');    
+ 104   3          }
+ 105   2          else//输入正常，进行计算
+ 106   2          {
+ 107   3            zhong=yunsuan(temp);
+ 108   3            if(temp.yunsuanfu!=4)//+-*运算
+ 109   3            {
+ 110   4              temp.jieguo=zhong.answer;
+ 111   4              temp.chang_jieguo=zhong.chang;
+ 112   4              temp.fuhao=zhong.fu;
+ 113   4              
+ 114   4            }
+ 115   3            else//  /运算
+ 116   3            {
+C51 COMPILER V9.57.0.0   ANJIANCHULI                                                       07/18/2026 11:34:43 PAGE 3   
+
+ 117   4              temp.zheng=zhong.zheng;
+ 118   4              temp.xiao=zhong.xiao;
+ 119   4              temp.chang_jieguo=zhong.chang;
+ 120   4            } 
+ 121   3            shuzi(1,16-temp.chang_b-temp.chang_a,temp.a,temp.chang_a);//运算完成，第一行显示算式
+ 122   3            shuzi(1,17-temp.chang_b,temp.b,temp.chang_b);
+ 123   3            switch(temp.yunsuanfu)
+ 124   3            {
+ 125   4              case 1:zifu(1,16-temp.chang_b,'+');break;
+ 126   4              case 2:zifu(1,16-temp.chang_b,'-');break;
+ 127   4              case 3:zifu(1,16-temp.chang_b,'*');break;
+ 128   4              case 4:zifu(1,16-temp.chang_b,'/');break;
+ 129   4            }
+ 130   3            
+ 131   3            temp.yunsuanfu=5;//运算符号为 =
+ 132   3          }
+ 133   2        }
+ 134   1        
+ 135   1        ////////////////按下delete键
+ 136   1        if(key==13)//delete
+ 137   1        {
+ 138   2          if(temp.yunsuanfu==5)//运算完成，直接清空
+ 139   2          {
+ 140   3            memset(&temp,0,sizeof(temp));//将全部元素设置为0
+ 141   3            temp.flag=1;//设置为输入a
+ 142   3            xiez(QING);//LCD清屏
+ 143   3            yanshi(1);
+ 144   3          }
+ 145   2          else//运算未完成，删除
+ 146   2          {
+ 147   3            if(temp.flag==1)//输入a时
+ 148   3            {
+ 149   4              temp.a=temp.a/10;
+ 150   4              if(temp.chang_a>0)
+ 151   4              temp.chang_a--;
+ 152   4            }
+ 153   3            if(temp.flag==2)//输入b时
+ 154   3            {
+ 155   4              temp.b=temp.b/10;
+ 156   4              if(temp.chang_b>0)
+ 157   4              temp.chang_b--;
+ 158   4            } 
+ 159   3          }
+ 160   2        }
+ 161   1        
+ 162   1        return temp;
+ 163   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    840    ----
+   CONSTANT SIZE    =     34    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     33       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
